@@ -37,6 +37,14 @@
       end type filtstrip_operation
       type (filtstrip_operation), dimension(:), allocatable :: filtstrip_db
 
+      type delayed_fertilization
+          integer :: num_fert = 0
+          character(len=20), dimension(:), allocatable :: fert_type
+          real(8), dimension(:), allocatable :: fert_amount
+          character(len=20), dimension(:), allocatable :: fert_method 
+      end type delayed_fertilization
+      type(delayed_fertilization), dimension(:), allocatable :: delayed_fert
+
       type fire_operation
         character (len=40) :: name = ""
         real :: cn2_upd = 0.            !       |change in SCS curve number II value

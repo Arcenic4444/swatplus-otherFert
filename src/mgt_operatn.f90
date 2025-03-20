@@ -29,25 +29,24 @@
       use hru_module, only : hru, yr_skip, phubase, ihru, ipl
       use plant_module
       use time_module
+      use climate_module, only: w
       
       implicit none
 
       integer :: j = 0       !none          |HRU number
       real :: aphu = 0.      !heat units    |fraction of total heat units accumulated 
       integer :: isched = 0  !              |
+      integer :: i
+      logical :: applied_fert
+
 
       j = ihru
       isched = hru(j)%mgt_ops
       
       if (sched(isched)%num_ops < 1) return
       
-        !mgt = sched(isched)%mgt_ops(hru(j)%cur_op)
-        !
-        !if (mgt%op == "fert      ") then
-        !      if (w%precip > 10) then
-        !        mgt%deferred_fert =mgt%op1
-        !      endif
-        !endif
+      mgt = sched(isched)%mgt_ops(hru(j)%cur_op)
+      applied_fert = .false.
         
         do while(mgt%mon == time%mo .and. mgt%day == time%day_mo)
           call mgt_sched (isched)
