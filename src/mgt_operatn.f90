@@ -30,52 +30,81 @@
       use plant_module
       use time_module
       use climate_module, only: w
-      
+
       implicit none
 
       integer :: j = 0       !none          |HRU number
       real :: aphu = 0.      !heat units    |fraction of total heat units accumulated 
       integer :: isched = 0  !              |
-      integer :: i
-      logical :: applied_fert
-
-
+      integer :: i,k,ii
+      logical :: found
+      integer :: fert_count = 0
+      save fert_count
+      
       j = ihru
       isched = hru(j)%mgt_ops
       
       if (sched(isched)%num_ops < 1) return
       
       mgt = sched(isched)%mgt_ops(hru(j)%cur_op)
-      applied_fert = .false.
-        
-        do while(mgt%mon == time%mo .and. mgt%day == time%day_mo)
+      
+      do while(mgt%mon == time%mo .and. mgt%day == time%day_mo)
+        if (mgt%op == "fert      ") then
+          if (w%precip > 10.0) then
+            if (.not. allocated(delayed_fert(j)%fert_type)) then
+              allocate(delayed_fert(j)%fert_type(100))     
+              allocate(delayed_fert(j)%fert_amount(100))
+              allocate(delayed_fert(j)%fert_method(100))
+              delayed_fert(j)%num_fert = 0
+              fert_count = 0
+            end if
+            
+            delayed_fert(j)%num_fert = delayed_fert(j)%num_fert + 1
+            i = delayed_fert(j)%num_fert
+            delayed_fert(j)%fert_type(i) = mgt%op_char
+            delayed_fert(j)%fert_amount(i) = mgt%op3
+            delayed_fert(j)%fert_method(i) = mgt%op_plant
+            hru(j)%cur_op = hru(j)%cur_op + 1
+            if (hru(j)%cur_op > sched(isched)%num_ops) then
+              hru(j)%cur_op = 1
+            end if
+            mgt = sched(isched)%mgt_ops(hru(j)%cur_op)
+          else
+            if (allocated(delayed_fert(j)%fert_type)) then
+              call fert_after_prec(isched, fert_count)
+            else
+              call mgt_sched (isched)
+            endif
+          endif
+        else
           call mgt_sched (isched)
-          if (sched(isched)%num_ops == 1) exit
-          if (yr_skip(j) == 1) exit
-        end do
+        endif
+        if (sched(isched)%num_ops == 1) exit
+        if (yr_skip(j) == 1) exit
+      end do
 
+      ipl = Max(mgt%op2, 1)
+      if (pcom(j)%plcur(ipl)%gro == "n") then
+        aphu = phubase(j)
+      else
+        aphu = pcom(j)%plcur(ipl)%phuacc
+      end if 
+      !if (dorm_flag == 1) aphu = 999.
+      do while (mgt%husc > 0. .and. aphu > mgt%husc)
+        call mgt_sched (isched)
+        if (sched(isched)%num_ops == 1) exit
         ipl = Max(mgt%op2, 1)
         if (pcom(j)%plcur(ipl)%gro == "n") then
           aphu = phubase(j)
         else
           aphu = pcom(j)%plcur(ipl)%phuacc
-        end if 
+        end if
         !if (dorm_flag == 1) aphu = 999.
-        do while (mgt%husc > 0. .and. aphu > mgt%husc)
+        if (mgt%op == "skip") then
           call mgt_sched (isched)
-          if (sched(isched)%num_ops == 1) exit
-          ipl = Max(mgt%op2, 1)
-          if (pcom(j)%plcur(ipl)%gro == "n") then
-            aphu = phubase(j)
-          else
-            aphu = pcom(j)%plcur(ipl)%phuacc
-          end if
-          !if (dorm_flag == 1) aphu = 999.
-          if (mgt%op == "skip") then
-           call mgt_sched (isched)
-          end if
-          if (yr_skip(j) == 1) exit
-        end do
-         
-      return
-      end subroutine mgt_operatn
+        end if
+        if (yr_skip(j) == 1) exit
+      end do
+        
+    return
+    end subroutine mgt_operatn

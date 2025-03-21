@@ -48,6 +48,7 @@
             else
                 m_ferts = 2
             endif
+
             allocate (mpdf_fert_parmas_db(kk)%mpdf_fert_parmas_rot_db(m_ferts)%centers(1:10))
             allocate (mpdf_fert_parmas_db(kk)%mpdf_fert_parmas_rot_db(m_ferts)%time_windows(1:10))
             allocate (mpdf_fert_parmas_db(kk)%mpdf_fert_parmas_rot_db(m_ferts)%weights(1:10))
@@ -59,7 +60,6 @@
             mpdf_fert_parmas_db(kk)%mpdf_fert_parmas_rot_db(m_ferts)%weights = weights
           enddo
           db_mx%mpdf_fert  = im 
-          write(*,*) "db_mx%mpdf_fert", db_mx%mpdf_fert
 
       endif
       close(107)

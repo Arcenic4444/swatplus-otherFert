@@ -1,0 +1,6 @@
+                   SWAT+               
+             Revision @SWAT_VERSION@  
+      Soil & Water Assessment Tool    
+@CMAKE_Fortran_COMPILER_ID@ (@CMAKE_Fortran_COMPILER_VERSION@), @ISO@, @CMAKE_HOST_SYSTEM_NAME@
+    Program reading . . . executing
+

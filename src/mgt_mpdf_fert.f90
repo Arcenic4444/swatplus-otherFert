@@ -31,7 +31,6 @@ subroutine mgt_mpdf_fert(ifer, fertilizer_per_day_P, fertilizer_per_day_N)
         do i = 1, n_days
             fertilizer_per_day(i) = fertilizer_sum * fertilizer_per_day(i) / sum_pdf_values
         end do
-
         ! Assign to output
         if (fer_elem == 1) then
             fertilizer_per_day_N = fertilizer_per_day

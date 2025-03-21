@@ -32,7 +32,7 @@ subroutine allo_mpdf_fert(isched, iop)
                 sched(isched)%mgt_ops(index_for_sched)%day = day
                 sched(isched)%mgt_ops(index_for_sched)%jday = ddd
                 sched(isched)%mgt_ops(index_for_sched)%husc = 0
-                sched(isched)%mgt_ops(index_for_sched)%year = 1
+                sched(isched)%mgt_ops(index_for_sched)%year = iyear
                 sched(isched)%mgt_ops(index_for_sched)%op3 = fertilizer_per_day_N(ddd)
                 sched(isched)%mgt_ops(index_for_sched)%op_plant = "broadcast"
                 sched(isched)%mgt_ops(index_for_sched)%op4 = 1

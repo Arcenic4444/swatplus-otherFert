@@ -82,7 +82,7 @@
       real :: sedppm = 0.        !Jeong 2024
       
       j = ihru
-      
+
       !rtb - calculate soil water at the beginning of the day
       sw_volume_begin = 0.
       do j1=1,soil(j)%nly
@@ -277,7 +277,7 @@
 
         !! perform management operations
         if (yr_skip(j) == 0) call mgt_operatn
-        
+
         !! compute surface runoff processes
         if (ires == 0) then
           call surface

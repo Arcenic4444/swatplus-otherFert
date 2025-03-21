@@ -25,6 +25,7 @@
       use maximum_data_module
       use gwflow_module
       use soil_module
+      use mgt_operations_module
       implicit none
 
       real, dimension(time%step) :: hyd_flo     !flow hydrograph
@@ -54,6 +55,15 @@
       real :: tn_mass = 0.
       
       icmd = sp_ob1%objs
+
+      if (.not. allocated(delayed_fert)) then
+          allocate(delayed_fert(1:sp_ob%hru))
+          do j = 1, sp_ob%hru
+              delayed_fert(j)%num_fert = 0
+          end do
+      end if
+
+
       do while (icmd /= 0)
         !subdaily - set current day of hydrograph
        !if (time%step > 0) then

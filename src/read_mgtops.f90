@@ -25,18 +25,18 @@
       integer :: add_ops = 0
       integer :: eof = 0
 
-
       do iop = 1, nops
           read (107,*,iostat=eof) op, titldum
           if (op == "mfrt") add_ops = add_ops + 729
       end do
-
       do iop = 1, nops
         backspace(107)
       end do
 
       sched(isched)%num_ops = nops + add_ops
       allocate(sched(isched)%mgt_ops(sched(isched)%num_ops))
+
+      add_ops = 0
 
       iyear = 1
       do iop = 1, nops                                              !! operation loop
