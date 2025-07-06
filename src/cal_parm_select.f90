@@ -36,7 +36,8 @@
       use plant_module
       use plant_data_module
       use gwflow_module
-      
+      use gwflow_module
+
       implicit none
 
       character(len=16), intent (in) :: chg_parm            !                |               
@@ -59,7 +60,6 @@
       real :: rock = 0.                                     !                | 
 
       select case (chg_parm)
-
       case ("cn2")
         cn2(ielem) = chg_par (cn2(ielem), chg_typ, chg_val, absmin, absmax)
         call curno (cn2(ielem), ielem)
@@ -123,10 +123,8 @@
                          chg_typ, chg_val, absmin, absmax)
         
       case ("esco")
-        write(*,*) '----------esco_old', hru(ielem)%hyd%esco
         hru(ielem)%hyd%esco = chg_par (hru(ielem)%hyd%esco,             & 
                          chg_typ, chg_val, absmin, absmax)
-        write(*,*) '----------esco', hru(ielem)%hyd%esco
          
       case ("epco")
         hru(ielem)%hyd%epco = chg_par (hru(ielem)%hyd%epco,             & 
@@ -517,11 +515,31 @@
        case ("rk5")
           ch_nut(ielem)%rs2 = chg_par(ch_nut(ielem)%rs2,                &
                          chg_typ, chg_val, absmin, absmax) 
-        
+
        case ("rk6")
           ch_nut(ielem)%rk6 = chg_par(ch_nut(ielem)%rk6,                &
+                         chg_typ, chg_val, absmin, absmax)      
+
+       case ("rhoq")
+          ch_nut(ielem)%rhoq = chg_par(ch_nut(ielem)%rhoq,                &
                          chg_typ, chg_val, absmin, absmax)
-        
+
+       case ("ai0")
+          ch_nut(ielem)%ai0 = chg_par(ch_nut(ielem)%ai0,                &
+                         chg_typ, chg_val, absmin, absmax)
+
+       case ("ai1")
+          ch_nut(ielem)%ai1 = chg_par(ch_nut(ielem)%ai1,                &
+                         chg_typ, chg_val, absmin, absmax)
+                         
+       case ("ai2")
+          ch_nut(ielem)%ai2 = chg_par(ch_nut(ielem)%ai2,                &
+                         chg_typ, chg_val, absmin, absmax)
+                           
+       case ("p_n")
+          ch_nut(ielem)%p_n = chg_par(ch_nut(ielem)%p_n,                &
+                         chg_typ, chg_val, absmin, absmax)
+
        case ("bc1")
           ch_nut(ielem)%bc1 = chg_par(ch_nut(ielem)%bc1,                &
                          chg_typ, chg_val, absmin, absmax)
@@ -536,6 +554,12 @@
         
         case ("bc4")
           ch_nut(ielem)%bc4 = chg_par(ch_nut(ielem)%bc4,                &
+                         chg_typ, chg_val, absmin, absmax)
+       case ("k_n")
+          ch_nut(ielem)%k_n = chg_par(ch_nut(ielem)%k_n,                &
+                         chg_typ, chg_val, absmin, absmax)
+       case ("k_p")
+          ch_nut(ielem)%k_p = chg_par(ch_nut(ielem)%k_p,                &
                          chg_typ, chg_val, absmin, absmax)
         case ("rch_dox")
           ch(ielem)%rch_dox = chg_par(ch(ielem)%rch_dox,                &
@@ -926,7 +950,6 @@
          case ("revap_min")
             aqu_dat(ielem)%revap_min = chg_par(aqu_dat(ielem)%revap_min,    &
                          chg_typ, chg_val, absmin, absmax)
-               
       !!LTE
          case ("cn2_lte")
             hlt_db(ielem)%cn2 = chg_par (hlt_db(ielem)%cn2, chg_typ, chg_val, absmin, absmax)
@@ -1036,7 +1059,12 @@
           do jj = 1, soil(ielem)%nly
             soil1(ielem)%mp(ly)%lab = chg_par (soil1(ielem)%mp(ly)%lab, chg_typ, chg_val, absmin, absmax)
           end do
-          
+
+        case ("nitrate")
+          do jj = 1, soil(ielem)%nly
+            soil1(ielem)%mn(ly)%no3 = chg_par (soil1(ielem)%mn(ly)%no3, chg_typ, chg_val, absmin, absmax)
+          end do   
+
         case ("hum_c_n")
           do jj = 1, soil(ielem)%nly
             soil1(ielem)%hact(ly)%n = chg_par (soil1(ielem)%hact(ly)%n, chg_typ, chg_val, absmin, absmax)
