@@ -515,16 +515,13 @@
 
           case ("skip")    !! skip a year
             yr_skip(j) = 1
-
+            
       end select
 
       if (mgt%op /= "skip") hru(j)%cur_op = hru(j)%cur_op + 1  !don't increment if skip year
       if (hru(j)%cur_op > sched(isched)%num_ops) then
         hru(j)%cur_op = 1
       end if
-      
       mgt = sched(isched)%mgt_ops(hru(j)%cur_op)
-   
       return
-
       end subroutine mgt_sched
